@@ -1,13 +1,10 @@
 import fastify from "fastify";
 
-import authPlugin from "./auth.plugin.js";
-import authRoute from "./auth.route.js";
+import auth from "./auth/index.js";
 
 const app = fastify({ logger: true });
 
-app.register(authPlugin);
-
-app.register(authRoute);
+app.register(auth);
 
 app.register((app) => {
 	app.get("/", { onRequest: app.authenticate }, async (request, reply) => {
