@@ -3,16 +3,28 @@ import type { RouterView } from "vue-router";
 </script>
 
 <template>
-  <header>
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/signup">Sign up</RouterLink>
-      <RouterLink to="/signin">Sign in</RouterLink>
-    </nav>
-  </header>
-  <main>
-    <RouterView />
-  </main>
+  <div id="layout">
+    <header id="header" class="card">
+      <nav id="headernav">
+        <div id="headernav-left">
+          <RouterLink class="link" to="/">
+            <span class="link-text">Home</span>
+          </RouterLink>
+        </div>
+        <div id="headernav-right">
+          <RouterLink class="link" to="/signup">
+            <span class="link-text">Sign up</span>
+          </RouterLink>
+          <RouterLink class="link" to="/signin">
+            <span class="link-text">Sign in</span>
+          </RouterLink>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <RouterView />
+    </main>
+  </div>
 </template>
 
 <style>

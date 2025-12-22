@@ -1,3 +1,5 @@
 <template>
-  <p>Nothing here yet...</p>
+  <article class="card placeholder">
+    <p>Display user posts</p>
+  </article>
 </template>
