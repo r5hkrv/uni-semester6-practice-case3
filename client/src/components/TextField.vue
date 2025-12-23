@@ -49,13 +49,16 @@ const setFocused = (value: boolean) => {
   position: relative;
 }
 
+.field-label,
+.field-notch-spacer {
+  font-size: var(--font-size);
+  font-weight: 700;
+}
+
 .field-label {
   padding-left: calc(var(--border-width) + var(--notch-width));
 
   position: absolute;
-
-  font-size: var(--font-size);
-  font-weight: 700;
 
   display: inline-block;
 }
@@ -82,8 +85,6 @@ const setFocused = (value: boolean) => {
 
 .field-notch-spacer {
   padding-inline: var(--notch-spacer-padding);
-
-  font-size: var(--font-size);
 
   visibility: hidden;
 }
