@@ -5,7 +5,8 @@
   "exports": "./dist/index.mjs",
   "scripts": {
     "dev": "tsx watch --clear-screen=false ./src/index.ts",
-    "build": "pkgroll --clean-dist"
+    "build": "pkgroll --clean-dist",
+    "preview": "node ./dist/index.mjs"
   },
   "dependencies": {
     "fastify": "^5.6.2",
