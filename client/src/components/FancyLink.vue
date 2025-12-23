@@ -16,7 +16,7 @@ const props = defineProps({
 .link {
   padding: 0.75rem;
 
-  color: oklch(0.72 0.24 235);
+  color: var(--color-accent-blue);
 
   text-decoration: none;
 
@@ -24,7 +24,7 @@ const props = defineProps({
 }
 
 .router-link-exact-active.link {
-  color: oklch(0.72 0.24 0);
+  color: var(--color-accent-pink);
 }
 
 .link-text {

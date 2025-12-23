@@ -1,5 +1,14 @@
+:root {
+  --color-accent-blue: oklch(0.72 0.24 235);
+  --color-accent-pink: oklch(0.72 0.24 0);
+  --color-gray-4: oklch(0.96 0 0);
+  --color-gray-6: oklch(0.94 0 0);
+  --color-gray-8: oklch(0.92 0 0);
+  --color-gray-12: oklch(0.88 0 0);
+}
+
 html {
-  background-color: oklch(0.96 0 0);
+  background-color: var(--color-gray-4);
 
   font-family: sans-serif;
 }
@@ -21,11 +30,10 @@ body {
   padding-inline: 1rem;
   margin: 0px auto;
 
-  border: 2px dashed oklch(0.8 0 0);
+  border: 2px dashed var(--color-gray-12);
   border-radius: 1rem;
 
-  color: oklch(0.4 0 0);
-  background-color: oklch(0.92 0 0);
+  background-color: var(--color-gray-6);
 
   text-align: center;
 }

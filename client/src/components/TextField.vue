@@ -41,7 +41,6 @@ const setFocused = (value: boolean) => {
 .field {
   --border-width: 2px;
   --font-size: 0.75rem;
-  --field-focused-accent: oklch(0.72 0.24 235);
   --notch-offset: 0.5rem;
   --notch-spacer-padding: 0.25rem;
   --notch-width: calc(var(--notch-offset) + var(--notch-spacer-padding));
@@ -71,7 +70,7 @@ const setFocused = (value: boolean) => {
   position: absolute;
   inset: 0px;
 
-  border: var(--border-width) solid oklch(0.88 0 0);
+  border: var(--border-width) solid var(--color-gray-12);
   border-radius: 0.5rem;
 
   pointer-events: none;
@@ -80,7 +79,7 @@ const setFocused = (value: boolean) => {
 }
 
 .field-notch.is-focused {
-  border-color: var(--field-focused-accent);
+  border-color: var(--color-accent-blue);
 }
 
 .field-notch-spacer {
