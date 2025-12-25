@@ -26,7 +26,13 @@ const useAuth = (path: AuthRoutePath) => {
 	});
 
 	const handleSubmit = async () => {
-		console.log(fields.value);
+		const reply = await fetch(`http://localhost:3000${path}`, {
+			method: "post",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify(fields.value),
+		});
+
+		if (reply.ok) token.value = await reply.text();
 	};
 
 	return {

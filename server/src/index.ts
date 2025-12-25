@@ -1,4 +1,5 @@
 import fastify from "fastify";
+import fastifyCors from "@fastify/cors";
 import path from "path";
 import fs from "fs/promises";
 
@@ -8,8 +9,22 @@ const resolveClientBuild = (filepath: string) => {
 	return path.resolve(import.meta.dirname, "../../client/dist", filepath);
 };
 
+const configureOrigin: fastifyCors.OriginFunction = (origin, cb) => {
+	if (origin !== undefined) {
+		const hostname = new URL(origin).hostname;
+
+		if (hostname === "localhost") {
+			cb(null, true);
+
+			return;
+		}
+	}
+	cb(null, false);
+};
+
 const app = fastify({ logger: true });
 
+app.register(fastifyCors, { origin: configureOrigin });
 app.register(auth);
 
 app.register((app) => {
