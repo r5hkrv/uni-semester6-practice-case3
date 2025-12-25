@@ -9,7 +9,7 @@ const { fields, submitLabel, handleSubmit } = useAuth(props.path);
 
 <template>
   <form @submit.prevent="handleSubmit">
-    <TextField v-model="fields.email" id="email" label="Name" />
+    <TextField v-model="fields.email" id="email" label="E-Mail" />
     <TextField v-model="fields.password" id="password" label="Password" />
     <button type="submit">{{ submitLabel }}</button>
   </form>
