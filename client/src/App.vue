@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import FancyLink from "./components/FancyLink.vue";
+import useAuthStore from "./composables/useAuthStore";
+
+const { user } = useAuthStore();
 </script>
 
 <template>
@@ -8,7 +11,10 @@ import FancyLink from "./components/FancyLink.vue";
       <div id="header-nav-main">
         <FancyLink to="/">Home</FancyLink>
       </div>
-      <FancyLink to="/signin">Sign in</FancyLink>
+      <span v-if="user !== null">
+        {{ user.email }}
+      </span>
+      <FancyLink v-else to="/signin">Sign in</FancyLink>
     </nav>
   </header>
   <main>

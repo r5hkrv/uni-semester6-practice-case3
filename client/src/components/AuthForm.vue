@@ -1,10 +1,38 @@
 <script setup lang="ts">
-import useAuth, { type AuthRoutePath } from "../composables/useAuth";
+import { shallowRef, computed } from "vue";
+import { useRouter } from "vue-router";
+
+import useAuthStore, { type AuthPath } from "../composables/useAuthStore";
 import TextField from "../components/TextField.vue";
 
-const props = defineProps<{ path: AuthRoutePath }>();
+const props = defineProps<{ path: AuthPath }>();
 
-const { fields, submitLabel, handleSubmit } = useAuth(props.path);
+const submitLabel = computed(() => {
+  switch (props.path) {
+    case "/signin":
+      return "Continue";
+    case "/signup":
+      return "Create a new account";
+  }
+});
+
+const { fetchToken, fetchProfile } = useAuthStore();
+const router = useRouter();
+
+const fields = shallowRef({
+  email: "",
+  password: "",
+});
+
+const handleSubmit = async () => {
+  let ok = await fetchToken(props.path, fields.value);
+
+  if (!ok) return;
+
+  ok = await fetchProfile();
+
+  if (ok) router.push("/");
+};
 </script>
 
 <template>
