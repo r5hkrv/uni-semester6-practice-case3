@@ -1,10 +1,10 @@
-import path from "path";
-import fs from "fs/promises";
 import type { FastifyPluginAsync } from "fastify";
 import fp from "fastify-plugin";
+import fs from "fs/promises";
+import path from "path";
 
-const getContentType = (filepath: string) => {
-	switch (path.extname(filepath)) {
+const getContentType = (extname: string) => {
+	switch (extname) {
 		case ".html":
 			return "text/html; charset=utf-8";
 		case ".css":
@@ -16,29 +16,37 @@ const getContentType = (filepath: string) => {
 	}
 };
 
-const getBuildArtifact = async (clientDist: string, filepath: string) => {
-	filepath = path.resolve(clientDist, filepath);
+const getBuildArtifact = async (buildDir: string, filepath: string) => {
+	filepath = path.resolve(buildDir, filepath);
 
+	const ext = path.extname(filepath);
+
+	if (ext === "") {
+		const stat = await fs.stat(filepath);
+
+		if (stat.isDirectory()) return null;
+	}
 	const data = await fs.readFile(filepath, "utf-8");
-	const type = getContentType(filepath);
+	const type = getContentType(ext);
 
 	return { data, type };
 };
 
 interface VueRouterFallbackOptions {
-	clientDist: string;
+	clientBuildDir: string;
 }
 
 type VueRouterFallbackPlugin = FastifyPluginAsync<VueRouterFallbackOptions>;
 
-const vueRouterFallback: VueRouterFallbackPlugin = async (fastify, options) => {
-	const { clientDist } = options;
-
+const vueRouterFallback: VueRouterFallbackPlugin = async (
+	fastify,
+	{ clientBuildDir }
+) => {
 	fastify.get("/*", async (request, reply) => {
 		try {
-			const artifact = await getBuildArtifact(clientDist, "index.html");
+			const buffer = await getBuildArtifact(clientBuildDir, "index.html");
 
-			reply.type(artifact.type).send(artifact.data);
+			reply.type("text/html").send(buffer);
 		} catch (error) {
 			reply.status(404);
 		}
@@ -47,7 +55,13 @@ const vueRouterFallback: VueRouterFallbackPlugin = async (fastify, options) => {
 	fastify.get("/assets/*", async (request, reply) => {
 		try {
 			const filepath = request.url.substring(1);
-			const artifact = await getBuildArtifact(clientDist, filepath);
+			const artifact = await getBuildArtifact(clientBuildDir, filepath);
+
+			if (artifact === null) {
+				reply.status(400);
+
+				return;
+			}
 
 			reply.type(artifact.type).send(artifact.data);
 		} catch (error) {

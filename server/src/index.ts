@@ -1,6 +1,6 @@
 import fastify from "fastify";
 import fastifyCors from "@fastify/cors";
-import vueRouterFallback from "@internal/vue-router-fallback";
+import vueRouterFallback from "./plugins/vueRouterFallback.js";
 import path from "node:path";
 
 import auth from "./auth/index.js";
@@ -23,7 +23,7 @@ const app = fastify({ logger: true });
 app.register(fastifyCors, { origin: configureOrigin });
 
 app.register(vueRouterFallback, {
-	clientDist: path.resolve(import.meta.dirname, "../../client/dist"),
+	clientBuildDir: path.resolve(import.meta.dirname, "../../client/dist"),
 });
 
 app.register(auth);
