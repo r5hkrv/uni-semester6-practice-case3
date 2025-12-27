@@ -35,4 +35,17 @@ app.register(vueRouterFallback, {
 	clientBuildDir: path.resolve(import.meta.dirname, "../../client/dist"),
 });
 
+app.register((fastify) => {
+	fastify.get(
+		"/profile",
+		{ onRequest: app.authenticate },
+		async (request, reply) => {
+			const token = request.headers.authorization!.split(" ")[1];
+			const { id } = app.jwt.decode<{ id: number }>(token)!;
+
+			return await app.prisma.user.findUnique({ where: { id } });
+		}
+	);
+});
+
 export default app;
