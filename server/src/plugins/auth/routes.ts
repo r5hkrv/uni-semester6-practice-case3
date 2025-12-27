@@ -17,7 +17,11 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
 				where: { email },
 			});
 
-			if (user !== null) return reply.status(400);
+			if (user !== null) {
+				reply.status(400);
+
+				return;
+			}
 
 			const pwhash = await bcrypt.hash(password, 10);
 
@@ -42,7 +46,11 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
 				where: { email },
 			});
 
-			if (user === null) return reply.status(400);
+			if (user === null) {
+				reply.status(400);
+
+				return;
+			}
 
 			const isPasswordOk = await bcrypt.compare(password, user.pwhash);
 
