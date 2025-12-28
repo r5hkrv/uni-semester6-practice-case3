@@ -1,12 +1,12 @@
 import type { FastifyPluginAsync } from "fastify";
 import bcrypt from "bcryptjs";
 
-import { type UserBodySchema, userSchema } from "./user.schema.js";
+import { type AuthBody, authSchema } from "./schema.js";
 
 const authRoutes: FastifyPluginAsync = async (fastify) => {
-	fastify.post<{ Body: UserBodySchema }>(
+	fastify.post<{ Body: AuthBody }>(
 		"/signup",
-		{ schema: userSchema, attachValidation: true },
+		{ schema: authSchema, attachValidation: true },
 		async (request, reply) => {
 			if (request.validationError !== undefined) {
 				return reply.status(400).send(request.validationError);
@@ -33,9 +33,9 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
 		}
 	);
 
-	fastify.post<{ Body: UserBodySchema }>(
+	fastify.post<{ Body: AuthBody }>(
 		"/signin",
-		{ schema: userSchema, attachValidation: true },
+		{ schema: authSchema, attachValidation: true },
 		async (request, reply) => {
 			if (request.validationError !== undefined) {
 				return reply.status(400).send(request.validationError);
@@ -54,7 +54,11 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
 
 			const isPasswordOk = await bcrypt.compare(password, user.pwhash);
 
-			if (!isPasswordOk) return reply.status(401);
+			if (!isPasswordOk) {
+				reply.status(401);
+
+				return;
+			}
 
 			return await reply.jwtSign({ id: user.id });
 		}

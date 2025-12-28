@@ -1,4 +1,3 @@
-import type { FastifyPluginAsync } from "fastify";
 import fp from "fastify-plugin";
 import fs from "fs/promises";
 import path from "path";
@@ -32,16 +31,11 @@ const getBuildArtifact = async (buildDir: string, filepath: string) => {
 	return { data, type };
 };
 
-interface VueRouterFallbackOptions {
+interface Options {
 	clientBuildDir: string;
 }
 
-type VueRouterFallbackPlugin = FastifyPluginAsync<VueRouterFallbackOptions>;
-
-const vueRouterFallback: VueRouterFallbackPlugin = async (
-	fastify,
-	{ clientBuildDir }
-) => {
+const vueRouterFallback = fp<Options>(async (fastify, { clientBuildDir }) => {
 	fastify.get("/*", async (request, reply) => {
 		const artifact = await getBuildArtifact(clientBuildDir, "index.html");
 
@@ -70,6 +64,6 @@ const vueRouterFallback: VueRouterFallbackPlugin = async (
 			reply.status(404);
 		}
 	});
-};
+});
 
-export default fp(vueRouterFallback);
+export default vueRouterFallback;

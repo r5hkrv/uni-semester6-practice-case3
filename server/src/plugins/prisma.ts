@@ -8,12 +8,14 @@ declare module "fastify" {
 	}
 }
 
-type PrismaPluginOptions = {
+type Options = {
 	adapter: SqlDriverAdapterFactory;
 };
 
-export default fp<PrismaPluginOptions>(async (fastify, options) => {
+const prismaPlugin = fp<Options>(async (fastify, options) => {
 	const client = new PrismaClient({ adapter: options.adapter });
 
 	fastify.decorate("prisma", client);
 });
+
+export default prismaPlugin;

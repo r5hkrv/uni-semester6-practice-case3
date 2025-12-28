@@ -1,8 +1,6 @@
-import type { onRequestAsyncHookHandler, FastifyPluginAsync } from "fastify";
+import type { onRequestAsyncHookHandler } from "fastify";
 import fastifyJwt from "@fastify/jwt";
 import fp from "fastify-plugin";
-
-import authRoutes from "./routes.js";
 
 declare module "fastify" {
 	interface FastifyInstance {
@@ -10,17 +8,15 @@ declare module "fastify" {
 	}
 }
 
-type AuthPlugin = FastifyPluginAsync<{
+interface Options {
 	tokenExpiresIn: string | number;
-}>;
+}
 
-const authPlugin: AuthPlugin = async (fastify, options) => {
+const authPlugin = fp<Options>(async (fastify, options) => {
 	fastify.register(fastifyJwt, {
 		secret: "temporary",
 		sign: { expiresIn: options.tokenExpiresIn },
 	});
-
-	fastify.register(authRoutes);
 
 	fastify.decorate("authenticate", async (request, reply) => {
 		try {
@@ -29,6 +25,6 @@ const authPlugin: AuthPlugin = async (fastify, options) => {
 			reply.send(error);
 		}
 	});
-};
+});
 
-export default fp(authPlugin);
+export default authPlugin;

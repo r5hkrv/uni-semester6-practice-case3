@@ -1,5 +1,11 @@
 import app from "./app.js";
 
+import authRoutes from "./auth/routes.js";
+import profileRoutes from "./profile/routes.js";
+
+app.register(authRoutes, { prefix: "/api" });
+app.register(profileRoutes, { prefix: "/api" });
+
 try {
 	await app.listen({ port: 3000 });
 } catch (error) {
